@@ -1,7 +1,9 @@
 package com.tripled.utils
 
 import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
@@ -11,3 +13,6 @@ fun Activity.hasPermission(permission: String): Boolean =
 fun Activity.requestPermissions(code: Int, vararg permissions: String) {
     ActivityCompat.requestPermissions(this, permissions, code)
 }
+
+val Activity.connectivityManager: ConnectivityManager
+    get() = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

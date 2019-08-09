@@ -14,7 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.tripled.myapplication.MainActivity
 import com.tripled.myapplication.R
-import com.tripled.utils.NetworkUtils
+import com.tripled.utils.network.NetworkUtils
 
 class FinderForegroundService : IntentService(SERVICE_NAME), IFinderListener {
     companion object {
@@ -87,8 +87,8 @@ class FinderForegroundService : IntentService(SERVICE_NAME), IFinderListener {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // Returning, since onStartCommand is called every time when startService is called
-        if (finder != null || !NetworkUtils.getIsConnectedToSpot(this)) return START_NOT_STICKY
-        val netmask = NetworkUtils.getLocalSubnet()
+        if (finder != null || NetworkUtils.isConnectedToSpot) return START_NOT_STICKY
+        val netmask = NetworkUtils.localSubnet
         val wifiSSID = NetworkUtils.requestWifiSSID(this)
         Log.i("FFS", "Netmask $netmask WifiSSID $wifiSSID")
 
@@ -115,7 +115,7 @@ class FinderForegroundService : IntentService(SERVICE_NAME), IFinderListener {
     override fun onHandleIntent(intent: Intent?) {
         if (intent == null) return
         if (!NetworkUtils.isWifiEnabled) finder?.stop()
-        else if (NetworkUtils.getIsConnectedToSpot(applicationContext)) finder?.start()
+        else if (NetworkUtils.isConnectedToSpot) finder?.start()
     }
 
     /// Finder Listener

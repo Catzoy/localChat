@@ -1,7 +1,7 @@
 package com.tripled.finder
 
 import android.util.Log
-import com.tripled.utils.NetworkUtils
+import com.tripled.utils.network.NetworkUtils
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetSocketAddress
@@ -27,7 +27,7 @@ class UdpFinder(
 
     fun setup(): Exception? {
         try {
-            val broadcastAddress = NetworkUtils.getBroadcastAddress()
+            val broadcastAddress = NetworkUtils.broadcastAddress
 
             sender = DatagramSocket(UDP_SEARCH_SEND_PORT)
             receiver = DatagramSocket(null).apply {
@@ -48,8 +48,8 @@ class UdpFinder(
         sendThread = thread {
             try {
                 while (isActive) {
-                    val broadcastAddress = NetworkUtils.getBroadcastAddress()
-                    val localIp = NetworkUtils.getLocalIp()
+                    val broadcastAddress = NetworkUtils.broadcastAddress
+                    val localIp = NetworkUtils.localIp
                     val localIpInBytes = localIp.split(".").map { it.toInt().toByte() }.toByteArray()
                     val command = byteArrayOf(0x02, 0x04, *localIpInBytes)
                     sender?.send(
@@ -73,7 +73,7 @@ class UdpFinder(
             do {
                 try {
                     while (isActive) {
-                        val localIp = NetworkUtils.getLocalIp()
+                        val localIp = NetworkUtils.localIp
                         val info = ByteArray(6)
                         val packet = DatagramPacket(info, info.size)
                         receiver?.receive(packet)
