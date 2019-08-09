@@ -18,7 +18,7 @@ object NetworkUtils {
         ConnectedToSpot
     }
 
-    internal var wifiState: WifiState = Enabled
+    internal var wifiState: WifiState = Disabled
         set(value) {
             Log.d("Network", "Trying to set $value for wifi state")
             field = when (value) {

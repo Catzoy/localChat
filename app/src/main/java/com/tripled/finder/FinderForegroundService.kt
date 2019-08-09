@@ -87,7 +87,7 @@ class FinderForegroundService : IntentService(SERVICE_NAME), IFinderListener {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // Returning, since onStartCommand is called every time when startService is called
-        if (finder != null || NetworkUtils.isConnectedToSpot) return START_NOT_STICKY
+        if (finder != null || !NetworkUtils.isConnectedToSpot) return START_NOT_STICKY
         val netmask = NetworkUtils.localSubnet
         val wifiSSID = NetworkUtils.requestWifiSSID(this)
         Log.i("FFS", "Netmask $netmask WifiSSID $wifiSSID")
@@ -113,7 +113,6 @@ class FinderForegroundService : IntentService(SERVICE_NAME), IFinderListener {
     }
 
     override fun onHandleIntent(intent: Intent?) {
-        if (intent == null) return
         if (!NetworkUtils.isWifiEnabled) finder?.stop()
         else if (NetworkUtils.isConnectedToSpot) finder?.start()
     }
