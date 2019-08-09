@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Local Chat</string>
+    <string name="you_are_visible_message">You are visible in net %s</string>
+    <string name="you_are_visible_wifi">You are visible in WiFi %s</string>
+</resources>
