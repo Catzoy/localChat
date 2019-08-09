@@ -41,7 +41,7 @@ object NetworkUtils {
         get() = wifiState == ConnectedToSpot
 
     val isWifiEnabled: Boolean
-        get() = wifiState == Enabled
+        get() = wifiState != Disabled
 
     val broadcastAddress: String
         get() {

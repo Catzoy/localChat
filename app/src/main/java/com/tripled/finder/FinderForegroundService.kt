@@ -16,10 +16,9 @@ import com.tripled.myapplication.MainActivity
 import com.tripled.myapplication.R
 import com.tripled.utils.network.NetworkUtils
 
-class FinderForegroundService : IntentService(SERVICE_NAME), IFinderListener {
+class FinderForegroundService : Service(), IFinderListener {
     companion object {
         private const val TAG = "FFS"
-        private const val SERVICE_NAME = "FINDER_SERVICE"
         private const val NOTIFICATION_ID = 1
         private const val CHANNEL_ID = "FOREGROUND_FINDER_SERVICE"
         private const val CHANNEL_NAME = "FINDER_SERVICE"
@@ -35,11 +34,7 @@ class FinderForegroundService : IntentService(SERVICE_NAME), IFinderListener {
     private var finder: UdpFinder? = null
     private val stopListener = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
-            if (p1?.action == ACTION_STOP_SERVICE) {
-                p0?.unregisterReceiver(this)
-                finder?.stop()
-                stopForeground(true)
-            }
+            if (p1?.action == ACTION_STOP_SERVICE) finder?.stop()
         }
     }
 
@@ -87,23 +82,29 @@ class FinderForegroundService : IntentService(SERVICE_NAME), IFinderListener {
     /// Service
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Returning, since onStartCommand is called every time when startService is called
-        if (finder != null || !NetworkUtils.isConnectedToSpot) return START_STICKY
-        val netmask = NetworkUtils.localSubnet
-        val wifiSSID = NetworkUtils.requestWifiSSID(this)
-        Log.d(TAG, "Netmask $netmask WifiSSID $wifiSSID")
+        when {
+            !NetworkUtils.isConnectedToSpot -> {
+                Log.d(TAG, "Not connected to spot")
+                finder?.stop()
+                return START_STICKY
+            }
+            finder != null -> {
+                Log.d(TAG, "Action to finder")
+                if (!NetworkUtils.isWifiEnabled) finder?.stop()
+                else if (NetworkUtils.isConnectedToSpot) finder?.start()
+            }
+            else -> {
+                Log.d(TAG, "Setup")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    createChannel()
+                }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createChannel()
-        }
-
-        val notification = createNotification(netmask, wifiSSID)
-
-        startForeground(NOTIFICATION_ID, notification)
-        finder = UdpFinder(this).apply {
-            val result = setup()
-            if (result != null) onError(result)
-            else start()
+                finder = UdpFinder(this).apply {
+                    val result = setup()
+                    if (result != null) onError(result)
+                    else start()
+                }
+            }
         }
 
         return START_STICKY
@@ -111,12 +112,6 @@ class FinderForegroundService : IntentService(SERVICE_NAME), IFinderListener {
 
     override fun onBind(p0: Intent?): IBinder? {
         return null
-    }
-
-    override fun onHandleIntent(intent: Intent?) {
-        Log.d(TAG, "Handling new intent")
-        if (!NetworkUtils.isWifiEnabled) finder?.stop()
-        else if (NetworkUtils.isConnectedToSpot) finder?.start()
     }
 
     /// Finder Listener
@@ -132,5 +127,19 @@ class FinderForegroundService : IntentService(SERVICE_NAME), IFinderListener {
 
     override fun onNew(ip: String) {
         sendToMain(ACTION_ON_UDP_NEW_IP, DATA_NEW_IP to ip)
+    }
+
+    override fun onStarted() {
+        val netmask = NetworkUtils.localSubnet
+        val wifiSSID = NetworkUtils.requestWifiSSID(this)
+        Log.d(TAG, "Netmask $netmask WifiSSID $wifiSSID")
+        val notification = createNotification(netmask, wifiSSID)
+        startForeground(NOTIFICATION_ID, notification)
+    }
+
+    override fun onStopped() {
+        Log.d(TAG, "Stopping foreground")
+        stopForeground(true)
+        unregisterReceiver(stopListener)
     }
 }

@@ -31,14 +31,17 @@ class MainActivity : AppCompatActivity() {
     private val connectivityListenerApiSubN = ConnectivityListenerApiSubN()
     private val wifiStateListener = object : WifiStateListener {
         override fun onWifiDisabled() {
+            Log.d("WifiList", "On wifi disabled is called")
             startService(Intent(this@MainActivity, FinderForegroundService::class.java))
         }
 
         override fun onWifiEnabled() {
+            Log.d("WifiList", "On wifi enabled is called")
             startService(Intent(this@MainActivity, FinderForegroundService::class.java))
         }
 
         override fun onConnectedToSpot() {
+            Log.d("WifiList", "On connected to spot is called")
             startService(Intent(this@MainActivity, FinderForegroundService::class.java))
         }
     }
@@ -57,24 +60,24 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        NetworkUtils.registerWifiStateListener(wifiStateListener)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), connectivityListener)
         } else {
             registerReceiver(connectivityListenerApiSubN, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
         }
         registerReceiver(wifiListener, IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION))
-        NetworkUtils.registerWifiStateListener(wifiStateListener)
     }
 
     override fun onStop() {
         super.onStop()
+        NetworkUtils.unregisterWifiStateListener(wifiStateListener)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             connectivityManager.unregisterNetworkCallback(connectivityListener)
         } else {
             unregisterReceiver(connectivityListenerApiSubN)
         }
         unregisterReceiver(wifiListener)
-        NetworkUtils.unregisterWifiStateListener(wifiStateListener)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

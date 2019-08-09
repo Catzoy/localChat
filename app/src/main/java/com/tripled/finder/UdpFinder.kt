@@ -39,8 +39,6 @@ class UdpFinder(
             e.printStackTrace()
             return e
         }
-
-        isActive = true
         return null
     }
 
@@ -90,19 +88,23 @@ class UdpFinder(
     }
 
     fun start(restart: Boolean = true) {
-        Log.i(TAG, "Starting finder")
+        if (isActive) return
+        Log.d(TAG, "Starting finder")
+        isActive = true
         setupSender()
         setupReceiver(restart)
+        listener.onStarted()
     }
 
     fun stop() {
         try {
-            Log.i(TAG, "Stopping finder")
+            Log.d(TAG, "Stopping finder")
             isActive = false
             sender?.close()
             receiver?.close()
         } catch (e: Exception) {
             Log.e(TAG, "Cannot stop finder ${e.message}")
         }
+        listener.onStopped()
     }
 }
