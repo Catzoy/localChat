@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val wifiListener = WifiListener()
-    private val connectivityListener = ConnectivityListenerApiN()
+    private val connectivityListener = ConnectivityListenerApiN(this)
     private val connectivityListenerApiSubN = ConnectivityListenerApiSubN()
     private val wifiStateListener = object : WifiStateListener {
         override fun onWifiDisabled() {

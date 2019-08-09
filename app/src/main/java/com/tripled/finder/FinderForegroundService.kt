@@ -18,6 +18,7 @@ import com.tripled.utils.network.NetworkUtils
 
 class FinderForegroundService : IntentService(SERVICE_NAME), IFinderListener {
     companion object {
+        private const val TAG = "FFS"
         private const val SERVICE_NAME = "FINDER_SERVICE"
         private const val NOTIFICATION_ID = 1
         private const val CHANNEL_ID = "FOREGROUND_FINDER_SERVICE"
@@ -87,10 +88,10 @@ class FinderForegroundService : IntentService(SERVICE_NAME), IFinderListener {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // Returning, since onStartCommand is called every time when startService is called
-        if (finder != null || !NetworkUtils.isConnectedToSpot) return START_NOT_STICKY
+        if (finder != null || !NetworkUtils.isConnectedToSpot) return START_STICKY
         val netmask = NetworkUtils.localSubnet
         val wifiSSID = NetworkUtils.requestWifiSSID(this)
-        Log.i("FFS", "Netmask $netmask WifiSSID $wifiSSID")
+        Log.d(TAG, "Netmask $netmask WifiSSID $wifiSSID")
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel()
@@ -105,7 +106,7 @@ class FinderForegroundService : IntentService(SERVICE_NAME), IFinderListener {
             else start()
         }
 
-        return START_NOT_STICKY
+        return START_STICKY
     }
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -113,6 +114,7 @@ class FinderForegroundService : IntentService(SERVICE_NAME), IFinderListener {
     }
 
     override fun onHandleIntent(intent: Intent?) {
+        Log.d(TAG, "Handling new intent")
         if (!NetworkUtils.isWifiEnabled) finder?.stop()
         else if (NetworkUtils.isConnectedToSpot) finder?.start()
     }

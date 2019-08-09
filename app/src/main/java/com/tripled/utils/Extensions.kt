@@ -14,5 +14,5 @@ fun Activity.requestPermissions(code: Int, vararg permissions: String) {
     ActivityCompat.requestPermissions(this, permissions, code)
 }
 
-val Activity.connectivityManager: ConnectivityManager
+val Context.connectivityManager: ConnectivityManager
     get() = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

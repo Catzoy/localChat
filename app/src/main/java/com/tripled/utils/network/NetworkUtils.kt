@@ -8,6 +8,7 @@ import java.net.Inet4Address
 import java.net.NetworkInterface
 
 object NetworkUtils {
+    private const val TAG = "Network"
     private const val DEFAULT_BROADCAST_NETWORK = "255.255.255.255"
     private const val DEFAULT_IP = "0.0.0.0"
     private const val UNKNOWN_WIFI_SSID = "<unknown ssid>"
@@ -20,32 +21,20 @@ object NetworkUtils {
 
     internal var wifiState: WifiState = Disabled
         set(value) {
-            Log.d("Network", "Trying to set $value for wifi state")
+            val oldValue = field
+            Log.d(TAG, "Trying to set $value for wifi state")
             field = when (value) {
-                Disabled -> {
-                    wifiStateListeners.forEach(WifiStateListener::onWifiDisabled)
-                    value
-                }
-                Enabled -> {
-                    /** Callback of wifi receiver comes after connectivity listener callback */
-                    if (field == Disabled) {
-                        wifiStateListeners.forEach(WifiStateListener::onWifiEnabled)
-                        value
-                    } else {
-                        ConnectedToSpot
-                    }
-                }
-                ConnectedToSpot -> {
-                    /** Connectivity listener updates when phone is switched to LTE => unneeded change*/
-                    if (field == Enabled) {
-                        wifiStateListeners.forEach(WifiStateListener::onConnectedToSpot)
-                        value
-                    } else {
-                        Disabled
-                    }
-                }
+                /** Callback of wifi receiver comes after connectivity listener callback */
+                Enabled -> if (field == Disabled) value else ConnectedToSpot
+                else -> value
             }
-            Log.d("Network", "Wifi state is $field")
+            Log.d(TAG, "Wifi state is $field")
+            if (field == oldValue) return
+            else when (field) {
+                Disabled -> wifiStateListeners.forEach(WifiStateListener::onWifiDisabled)
+                Enabled -> wifiStateListeners.forEach(WifiStateListener::onWifiEnabled)
+                ConnectedToSpot -> wifiStateListeners.forEach(WifiStateListener::onConnectedToSpot)
+            }
         }
 
     val isConnectedToSpot: Boolean
