@@ -11,6 +11,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.tripled.communication.SocketService
 import com.tripled.finder.FinderForegroundService
 import com.tripled.localChat.ui.Navigator
 import com.tripled.localChat.ui.chat.ChatFragment
@@ -60,6 +61,7 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.chat_activity)
         checkLocationPermissionForNotification()
+        SocketService.start()
     }
 
     override fun onStart() {
@@ -89,5 +91,10 @@ class ChatActivity : AppCompatActivity() {
         if (requestCode == REQUEST_CODE_LOCATION && grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
             startService(Intent(this, FinderForegroundService::class.java))
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        SocketService.stop()
     }
 }

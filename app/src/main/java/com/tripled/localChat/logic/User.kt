@@ -9,6 +9,11 @@ data class User(
     val ip: String,
     val name: String? = null
 ) {
+    companion object {
+        fun copy(user: User, id: String? = null, state: UserState? = null, ip: String? = null, name: String? = null) =
+            User(id ?: user.id, state ?: user.state, ip ?: user.ip, name ?: user.name)
+    }
+
     enum class UserState {
         Unavailable,
         Available,

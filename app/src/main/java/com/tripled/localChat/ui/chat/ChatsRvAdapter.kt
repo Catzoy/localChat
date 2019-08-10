@@ -9,7 +9,7 @@ import com.tripled.localChat.R
 import com.tripled.localChat.logic.User
 import com.tripled.localChat.ui.helpingViews.StatusCircle
 
-class ChatsRvAdapter : RecyclerView.Adapter<ChatsRvAdapter.ViewHolder>() {
+class ChatsRvAdapter : RecyclerView.Adapter<ChatsRvAdapter.ViewHolder>(), ChatReceiver {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val userName = itemView.findViewById<TextView>(R.id.user_name)
         private val userIp = itemView.findViewById<TextView>(R.id.user_ip)
@@ -41,7 +41,7 @@ class ChatsRvAdapter : RecyclerView.Adapter<ChatsRvAdapter.ViewHolder>() {
         holder.inherit(users[position])
     }
 
-    fun userFound(user: User) {
+    override fun userFound(user: User) {
         val indexOfUser = users.indexOfFirst { it.id == user.id }
         if (indexOfUser != -1) {
             users[indexOfUser] = user
@@ -52,11 +52,19 @@ class ChatsRvAdapter : RecyclerView.Adapter<ChatsRvAdapter.ViewHolder>() {
         }
     }
 
-    fun userDisconnected(ip: String) {
+    override fun userDisconnected(ip: String) {
         val indexOfRemoval = users.indexOfFirst { it.ip == ip }
         if (indexOfRemoval != -1) {
             users.removeAt(indexOfRemoval)
             notifyItemRemoved(indexOfRemoval)
+        }
+    }
+
+    override fun userNewMessage(ip: String) {
+        val indexOfUser = users.indexOfFirst { it.ip == ip }
+        if (indexOfUser != -1) {
+            users[indexOfUser] = User.copy(users[indexOfUser], state = User.UserState.HasMessages)
+            notifyItemChanged(indexOfUser)
         }
     }
 }
