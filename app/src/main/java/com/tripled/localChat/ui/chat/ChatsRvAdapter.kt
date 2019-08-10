@@ -7,13 +7,27 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.tripled.localChat.R
 import com.tripled.localChat.logic.User
+import com.tripled.localChat.ui.helpingViews.StatusCircle
 
 class ChatsRvAdapter : RecyclerView.Adapter<ChatsRvAdapter.ViewHolder>() {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val userName = itemView.findViewById<TextView>(R.id.user_name)
+        private val userIp = itemView.findViewById<TextView>(R.id.user_ip)
+        private val userStatus = itemView.findViewById<StatusCircle>(R.id.status_circle)
+
+        fun inherit(user: User) {
+            val context = userName.context
+            userName.text = user.name ?: context.getString(R.string.default_user_name)
+            userIp.text = context.getString(R.string.ip, user.ip)
+            userStatus.setColor(user.colorForState)
+        }
+    }
+
     private val users = mutableListOf<User>(
-        User("192.168.123.44", "Dima"),
-        User("192.168.123.168", "Sasha"),
-        User("192.168.123.90", "Illya"),
-        User("192.168.123.183")
+        User("aa", User.UserState.Connected, "192.168.123.44", "Dima"),
+        User("bb", User.UserState.Unavailable, "192.168.123.168", "Sasha"),
+        User("cc", User.UserState.HasMessages, "192.168.123.90", "Illya"),
+        User("dd", "192.168.123.183")
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,13 +41,22 @@ class ChatsRvAdapter : RecyclerView.Adapter<ChatsRvAdapter.ViewHolder>() {
         holder.inherit(users[position])
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val userName = itemView.findViewById<TextView>(R.id.user_name)
-        private val userIp = itemView.findViewById<TextView>(R.id.user_ip)
+    fun userFound(user: User) {
+        val indexOfUser = users.indexOfFirst { it.id == user.id }
+        if (indexOfUser != -1) {
+            users[indexOfUser] = user
+            notifyItemChanged(indexOfUser)
+        } else {
+            users.add(user)
+            notifyItemInserted(users.size - 1)
+        }
+    }
 
-        fun inherit(user: User) {
-            userName.text = user.name ?: "None"
-            userIp.text = user.ip
+    fun userDisconnected(ip: String) {
+        val indexOfRemoval = users.indexOfFirst { it.ip == ip }
+        if (indexOfRemoval != -1) {
+            users.removeAt(indexOfRemoval)
+            notifyItemRemoved(indexOfRemoval)
         }
     }
 }
