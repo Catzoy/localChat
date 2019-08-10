@@ -97,6 +97,7 @@ class UdpFinder(
     }
 
     fun stop() {
+        if (!isActive) return
         try {
             Log.d(TAG, "Stopping finder")
             isActive = false

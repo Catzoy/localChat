@@ -12,7 +12,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import com.tripled.localChat.MainActivity
+import com.tripled.localChat.ChatActivity
 import com.tripled.localChat.R
 import com.tripled.utils.network.NetworkUtils
 
@@ -62,7 +62,7 @@ class FinderForegroundService : Service(), IFinderListener {
     }
 
     private fun createNotification(netmask: String, wifiSSID: String?): Notification {
-        val pendingIntent = Intent(this, MainActivity::class.java).let { intent ->
+        val pendingIntent = Intent(this, ChatActivity::class.java).let { intent ->
             PendingIntent.getActivity(this, 0, intent, 0)
         }
         val contentText =

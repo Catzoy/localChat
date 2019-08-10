@@ -20,16 +20,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <service
-            android:name="com.tripled.finder.FinderForegroundService"
-            android:exported="false" />
-
-        <activity android:name="com.tripled.localChat.MainActivity">
+        <activity android:name=".ChatActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.tripled.finder.FinderForegroundService"
+            android:exported="false" />
     </application>
 </manifest>

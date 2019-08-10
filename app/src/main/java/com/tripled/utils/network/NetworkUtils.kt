@@ -14,12 +14,13 @@ object NetworkUtils {
     private const val UNKNOWN_WIFI_SSID = "<unknown ssid>"
 
     enum class WifiState {
+        Unknown,
         Disabled,
         Enabled,
         ConnectedToSpot
     }
 
-    internal var wifiState: WifiState = Disabled
+    internal var wifiState: WifiState = Unknown
         set(value) {
             val oldValue = field
             Log.d(TAG, "Trying to set $value for wifi state")

@@ -2,4 +2,8 @@
     <string name="app_name">Local Chat</string>
     <string name="you_are_visible_message">You are visible in net %s</string>
     <string name="you_are_visible_wifi">You are visible in WiFi %s</string>
+    <string name="users_in_your_net">Users in your net</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
