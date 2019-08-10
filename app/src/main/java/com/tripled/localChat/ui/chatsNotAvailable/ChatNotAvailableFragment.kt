@@ -1,4 +1,4 @@
-package com.tripled.localChat.ui.chat
+package com.tripled.localChat.ui.chatsNotAvailable
 
 import android.os.Bundle
 import android.view.LayoutInflater

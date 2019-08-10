@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import com.tripled.localChat.R
 import com.tripled.localChat.ui.chat.ChatFragment
-import com.tripled.localChat.ui.chat.ChatNotAvailableFragment
+import com.tripled.localChat.ui.chatsNotAvailable.ChatNotAvailableFragment
 
 class Navigator private constructor(private val activity: AppCompatActivity) {
     companion object {

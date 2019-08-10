@@ -4,4 +4,6 @@
     <string name="you_are_visible_wifi">You are visible in WiFi %s</string>
     <string name="users_in_your_net">Users in your net</string>
     <string name="no_wifi_message">Looks like you are not connected to any WiFi spot.</string>
+    <string name="user_name">User name: </string>
+    <string name="ip">IP: </string>
 </resources>
