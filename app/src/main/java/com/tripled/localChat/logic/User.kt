@@ -20,8 +20,8 @@ data class User(
 
     val colorForState: Int
         get() = when (state) {
-            Unavailable -> Color.RED
-            Available -> Color.CYAN
+            Unavailable -> Color.GRAY
+            Available -> Color.RED
             Connected -> Color.GREEN
             HasMessages -> Color.BLUE
         }
