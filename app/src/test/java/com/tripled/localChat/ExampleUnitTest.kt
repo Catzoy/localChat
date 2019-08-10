@@ -1,4 +1,4 @@
-package com.tripled.myapplication
+package com.tripled.localChat
 
 import org.junit.Test
 

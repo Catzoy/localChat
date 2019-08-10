@@ -1,4 +1,4 @@
-package com.tripled.myapplication
+package com.tripled.localChat
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4

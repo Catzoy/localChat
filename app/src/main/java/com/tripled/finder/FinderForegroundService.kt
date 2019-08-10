@@ -12,8 +12,8 @@ import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import com.tripled.myapplication.MainActivity
-import com.tripled.myapplication.R
+import com.tripled.localChat.MainActivity
+import com.tripled.localChat.R
 import com.tripled.utils.network.NetworkUtils
 
 class FinderForegroundService : Service(), IFinderListener {

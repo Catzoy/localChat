@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.tripled.myapplication">
+    package="com.tripled.localChat">
 
     <dist:module dist:instant="true" />
 
@@ -24,7 +24,7 @@
             android:name="com.tripled.finder.FinderForegroundService"
             android:exported="false" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name="com.tripled.localChat.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
