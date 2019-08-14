@@ -1,4 +1,4 @@
-package com.tripled.communication
+package com.tripled.communication.server
 
 import java.lang.Exception
 

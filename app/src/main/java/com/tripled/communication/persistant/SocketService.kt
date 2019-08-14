@@ -1,7 +1,9 @@
-package com.tripled.communication
+package com.tripled.communication.persistant
 
 import android.util.Log
-import java.lang.Exception
+import com.tripled.communication.server.NewConnectionsServer
+import com.tripled.communication.server.ServerListener
+import com.tripled.db.AppDb
 
 object SocketService : ServerListener {
     private const val TAG = "SocketService"
@@ -27,9 +29,9 @@ object SocketService : ServerListener {
         if (receiver != null && user != null) receiver?.onNewConnection(user)
     }
 
-    fun start() {
+    fun start(db: AppDb) {
         val result = connectionsServer.setup()
-        if (result == null) connectionsServer.start()
+        if (result == null) connectionsServer.start(db.chatsDao(), db.messagesDao())
     }
 
     fun stop() {

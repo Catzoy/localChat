@@ -10,18 +10,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.tripled.communication.DataReceiver
-import com.tripled.communication.SocketService
+import com.tripled.communication.persistant.DataReceiver
+import com.tripled.communication.persistant.SocketService
 import com.tripled.localChat.R
 import com.tripled.localChat.logic.User
-import kotlinx.android.synthetic.main.chat_fragment.*
 
 class ChatFragment : Fragment(), DataReceiver {
     companion object {
         fun newInstance() = ChatFragment()
     }
 
-    private lateinit var viewModel: ChatViewModel
     private lateinit var chatReceiver: ChatReceiver
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -31,11 +29,6 @@ class ChatFragment : Fragment(), DataReceiver {
                 adapter = ChatsRvAdapter().also { chatReceiver = it }
             }
         }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(ChatViewModel::class.java)
-    }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)

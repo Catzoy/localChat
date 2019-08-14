@@ -1,6 +1,10 @@
-package com.tripled.communication
+package com.tripled.communication.server
 
 import android.util.Log
+import com.tripled.communication.client.Client
+import com.tripled.db.ChatsDao
+import com.tripled.db.MessagesDao
+import com.tripled.db.MessagesDbListener
 import com.tripled.localChat.logic.User
 import java.net.ServerSocket
 import kotlin.concurrent.thread
@@ -26,12 +30,12 @@ class NewConnectionsServer(
         e
     }
 
-    fun start() = thread(start = false) {
+    fun start(chatsDao: ChatsDao, messagesDao: MessagesDao) = thread(start = false) {
         while (true) try {
             val socket = server?.accept()
             if (socket != null) {
                 val host = socket.inetAddress.hostAddress
-                sockets[host] = Client(socket)
+                sockets[host] = Client(socket, MessagesDbListener(chatsDao, messagesDao))
                 listener.onNewConnection(host)
             }
         } catch (e: Exception) {

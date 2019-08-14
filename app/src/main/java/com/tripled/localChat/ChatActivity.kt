@@ -8,13 +8,14 @@ import android.net.ConnectivityManager
 import android.net.NetworkRequest
 import android.net.wifi.WifiManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.tripled.communication.SocketService
+import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
+import com.tripled.communication.persistant.SocketService
+import com.tripled.db.AppDb
 import com.tripled.finder.FinderForegroundService
 import com.tripled.localChat.ui.Navigator
-import com.tripled.localChat.ui.chat.ChatFragment
 import com.tripled.utils.connectivityManager
 import com.tripled.utils.hasPermission
 import com.tripled.utils.network.NetworkUtils
@@ -29,6 +30,7 @@ class ChatActivity : AppCompatActivity() {
         private const val REQUEST_CODE_LOCATION = 191
     }
 
+    private lateinit var db: AppDb
     private val wifiListener = WifiListener()
     private val connectivityListener = ConnectivityListenerApiN(this)
     private val connectivityListenerApiSubN = ConnectivityListenerApiSubN()
@@ -60,8 +62,9 @@ class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.chat_activity)
+        db = Room.databaseBuilder(applicationContext, AppDb::class.java, "mainDB").build()
         checkLocationPermissionForNotification()
-        SocketService.start()
+        SocketService.start(db)
     }
 
     override fun onStart() {

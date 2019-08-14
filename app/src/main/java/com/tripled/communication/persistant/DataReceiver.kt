@@ -1,4 +1,4 @@
-package com.tripled.communication
+package com.tripled.communication.persistant
 
 import com.tripled.localChat.logic.User
 

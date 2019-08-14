@@ -32,7 +32,7 @@
             android:name="com.tripled.finder.FinderForegroundService"
             android:exported="false" />
         <service
-            android:name="com.tripled.communication.SocketService"
+            android:name="com.tripled.communication.persistant.SocketService"
             android:exported="false" />
     </application>
 </manifest>
