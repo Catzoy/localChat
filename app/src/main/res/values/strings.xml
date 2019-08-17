@@ -7,4 +7,5 @@
     <string name="ip">(%s)</string>
     <string name="default_user_name">Incognito</string>
     <string name="placeholder">Placeholder</string>
+    <string name="send">Send</string>
 </resources>

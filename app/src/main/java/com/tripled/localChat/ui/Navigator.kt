@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import com.tripled.localChat.R
 import com.tripled.localChat.ui.chat.ChatFragment
+import com.tripled.localChat.ui.chats.ChatsFragment
 import com.tripled.localChat.ui.chatsNotAvailable.ChatNotAvailableFragment
 
 class Navigator private constructor(private val activity: AppCompatActivity) {
@@ -22,7 +23,7 @@ class Navigator private constructor(private val activity: AppCompatActivity) {
 
     fun showAvailableUsers() = activity.runOnUiThread {
         manager.beginTransaction()
-            .replace(R.id.container, ChatFragment.newInstance())
+            .replace(R.id.container, ChatsFragment.newInstance())
             .commitNow()
     }
 
@@ -30,7 +31,10 @@ class Navigator private constructor(private val activity: AppCompatActivity) {
 
     }
 
-    fun showChat() {
-
+    fun showChat(user: String) {
+        manager.beginTransaction()
+            .add(ChatFragment(), "CurrentChat")
+            .addToBackStack(user)
+            .commit()
     }
 }

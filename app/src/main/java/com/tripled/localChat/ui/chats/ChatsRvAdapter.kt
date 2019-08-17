@@ -1,22 +1,32 @@
-package com.tripled.localChat.ui.chat
+package com.tripled.localChat.ui.chats
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.tripled.localChat.R
 import com.tripled.localChat.logic.User
-import com.tripled.localChat.ui.helpingViews.StatusCircle
+import kotlinx.android.synthetic.main.user_view_holder.view.*
 
-class ChatsRvAdapter : RecyclerView.Adapter<ChatsRvAdapter.ViewHolder>(), ChatReceiver {
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val userName = itemView.findViewById<TextView>(R.id.user_name)
-        private val userIp = itemView.findViewById<TextView>(R.id.user_ip)
-        private val userStatus = itemView.findViewById<StatusCircle>(R.id.status_circle)
+class ChatsRvAdapter(
+    private val listener: ChatsInputListener
+) : RecyclerView.Adapter<ChatsRvAdapter.UserVIew>(), ChatsReceiver {
+    inner class UserVIew(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val userName = itemView.user_name
+        private val userIp = itemView.user_ip
+        private val userStatus = itemView.status_circle
+        private val userLayout = itemView.user_layout
+        private lateinit var userId: String
+
+        init {
+            userLayout.setOnClickListener {
+                listener.onStartConversation(userId)
+            }
+        }
 
         fun inherit(user: User) {
             val context = userName.context
+            userId = user.id
             userName.text = user.name ?: context.getString(R.string.default_user_name)
             userIp.text = context.getString(R.string.ip, user.ip)
             userStatus.setColor(user.colorForState)
@@ -30,14 +40,14 @@ class ChatsRvAdapter : RecyclerView.Adapter<ChatsRvAdapter.ViewHolder>(), ChatRe
         User("dd", "192.168.123.183")
     )
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserVIew {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.user_view_holder, parent, false)
-        return ViewHolder(view)
+        return UserVIew(view)
     }
 
     override fun getItemCount(): Int = users.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: UserVIew, position: Int) {
         holder.inherit(users[position])
     }
 

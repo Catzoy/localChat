@@ -1,8 +1,8 @@
-package com.tripled.localChat.ui.chat
+package com.tripled.localChat.ui.chats
 
 import com.tripled.localChat.logic.User
 
-interface ChatReceiver {
+interface ChatsReceiver {
     fun userFound(user: User)
 
     fun userDisconnected(ip: String)

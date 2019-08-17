@@ -2,30 +2,41 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/chat"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.chat.ChatFragment">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/users_in_your_net"
-        android:textSize="@dimen/text_size_large"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_messages"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        app:layout_constraintBottom_toTopOf="@id/submit_message_btn"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <view
-        class="androidx.recyclerview.widget.RecyclerView"
-        android:id="@+id/users_rv"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/fill_parent"
-        android:layout_marginStart="@dimen/margin_medium"
-        android:layout_marginEnd="@dimen/margin_medium"
-        android:layout_marginTop="@dimen/margin_medium"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+    <EditText
+        android:id="@+id/message_input"
+        android:layout_width="0dp"
+        android:layout_height="40sp"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_medium"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/submit_message_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="Autofill,LabelFor" />
+
+    <Button
+        android:id="@+id/submit_message_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="40sp"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_medium"
+        android:text="@string/send"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/message_input" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
