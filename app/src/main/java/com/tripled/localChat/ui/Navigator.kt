@@ -33,8 +33,7 @@ class Navigator private constructor(private val activity: AppCompatActivity) {
 
     fun showChat(user: String) {
         manager.beginTransaction()
-            .add(ChatFragment(), "CurrentChat")
-            .addToBackStack(user)
+            .replace(R.id.container, ChatFragment.newInstance(user))
             .commit()
     }
 }

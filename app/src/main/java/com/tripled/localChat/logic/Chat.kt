@@ -1,17 +1,23 @@
 package com.tripled.localChat.logic
 
+import androidx.annotation.IntDef
 import androidx.room.Entity
-import androidx.room.TypeConverters
+import androidx.room.PrimaryKey
 
 @Entity(tableName = "chats")
-data class Chat(
-    val chatId: String,
-    @TypeConverters(ChatStatus::class)
-    val status: ChatStatus = ChatStatus.Captured
+class Chat(
+    @PrimaryKey val chatId: String,
+    @ChatStatus val status: Int = CAPTURED
 ) {
-    enum class ChatStatus(val code: Int) {
-        Captured(0),
-        Ongoing(1),
-        Finished(2)
+
+    // Using IntDef instead of enums
+    companion object {
+        const val CAPTURED = 0
+        const val ONGOING = 1
+        const val FINISHED = 2
+
+        @IntDef(CAPTURED, ONGOING, FINISHED)
+        @Retention(AnnotationRetention.SOURCE)
+        annotation class ChatStatus
     }
 }
