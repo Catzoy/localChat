@@ -100,4 +100,9 @@ class ChatActivity : AppCompatActivity() {
         super.onDestroy()
         SocketService.stop()
     }
+
+    override fun onBackPressed() {
+        if (Navigator.appState == Navigator.STATE_MAIN_SCREEN) super.onBackPressed()
+        else Navigator.of(this).showAvailableUsers()
+    }
 }
