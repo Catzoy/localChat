@@ -1,5 +1,6 @@
 package com.tripled.db
 
+import android.util.Log
 import com.tripled.communication.client.ClientListener
 import com.tripled.localChat.logic.Message
 import com.tripled.utils.ChatsUtils
@@ -32,6 +33,7 @@ class MessagesDbListener(
         messagesDao.addMessage(message)
     }
 
-    override fun onMessageWritten() {
+    override fun onMessageWritten(message: Message) {
+        Log.d("MDBL", "Message written ${message.id}")
     }
 }

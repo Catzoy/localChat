@@ -5,6 +5,7 @@ import com.tripled.communication.client.Client
 import com.tripled.db.ChatsDao
 import com.tripled.db.MessagesDao
 import com.tripled.db.MessagesDbListener
+import com.tripled.localChat.logic.Message
 import com.tripled.localChat.logic.User
 import java.net.ServerSocket
 import kotlin.concurrent.thread
@@ -54,5 +55,9 @@ class NewConnectionsServer(
 
     fun requestUser(ip: String): User? {
         return sockets[ip]?.readUserData()
+    }
+
+    fun sendMessage(message: Message) {
+        sockets[message.clientId]?.sendMessage(message)
     }
 }

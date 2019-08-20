@@ -4,6 +4,7 @@ import android.util.Log
 import com.tripled.communication.server.NewConnectionsServer
 import com.tripled.communication.server.ServerListener
 import com.tripled.db.AppDb
+import com.tripled.localChat.logic.Message
 
 object SocketService : ServerListener {
     private const val TAG = "SocketService"
@@ -36,5 +37,9 @@ object SocketService : ServerListener {
 
     fun stop() {
         connectionsServer.stop()
+    }
+
+    fun sendMessage(message: Message) {
+        connectionsServer.sendMessage(message)
     }
 }

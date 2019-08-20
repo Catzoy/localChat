@@ -44,10 +44,10 @@ class Navigator private constructor(private val activity: AppCompatActivity) {
 
     }
 
-    fun showChat(user: String) = activity.runOnUiThread {
+    fun showChat(user: String, chatId: String) = activity.runOnUiThread {
         appState = STATE_CHAT_SCREEN
         manager.beginTransaction()
-            .replace(R.id.container, ChatFragment.newInstance(user))
+            .replace(R.id.container, ChatFragment.newInstance(user, chatId))
             .commit()
     }
 }

@@ -16,11 +16,16 @@ class ChatRvAdapter : RecyclerView.Adapter<ChatRvAdapter.MessageView>() {
     }
 
     override fun getItemCount(): Int {
-        return 0
+        return messages.size
     }
 
     override fun onBindViewHolder(holder: MessageView, position: Int) {
         holder.setText(messages[position])
+    }
+
+    fun addMessage(text: String) {
+        messages.add(text)
+        notifyItemInserted(messages.size - 1)
     }
 
     inner class MessageView(itemView: View) : RecyclerView.ViewHolder(itemView) {

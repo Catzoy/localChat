@@ -9,5 +9,5 @@ interface ClientListener {
 
     fun onMessageSubmitted(message: Message)
 
-    fun onMessageWritten()
+    fun onMessageWritten(message: Message)
 }

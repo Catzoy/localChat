@@ -15,6 +15,7 @@ import com.tripled.communication.persistant.SocketService
 import com.tripled.localChat.R
 import com.tripled.localChat.logic.User
 import com.tripled.localChat.ui.Navigator
+import com.tripled.utils.ChatsUtils
 import kotlinx.android.synthetic.main.chats_fragment.view.*
 
 class ChatsFragment : Fragment(), DataReceiver, ChatsInputListener {
@@ -61,7 +62,7 @@ class ChatsFragment : Fragment(), DataReceiver, ChatsInputListener {
     // region ChatsInputListener
 
     override fun onStartConversation(id: String) {
-        Navigator.of(requireActivity() as AppCompatActivity).showChat(id)
+        Navigator.of(requireActivity() as AppCompatActivity).showChat(id, ChatsUtils.generateChatId())
     }
 
     // endregion

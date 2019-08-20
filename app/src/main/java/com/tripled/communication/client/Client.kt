@@ -69,11 +69,11 @@ class Client(
         }
     }
 
-    fun sendMessage(message: String) {
+    fun sendMessage(message: Message) {
         sendExecutor.submit {
             try {
-                output.write(message.toByteArray())
-                listeners.forEach { it.onMessageWritten() }
+                output.write(message.text.toByteArray())
+                listeners.forEach { it.onMessageWritten(message) }
             } catch (e: Exception) {
                 Log.e(TAG, "Cannot send message ${e.message}")
                 if (socket.isClosed) listeners.forEach { it.onSocketClosed() }
